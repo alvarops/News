@@ -7,6 +7,7 @@ using System.Web.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NewsAPI;
 using NewsAPI.Controllers;
+using NewsAPI.Models;
 
 namespace NewsAPI.Tests.Controllers
 {
@@ -20,15 +21,15 @@ namespace NewsAPI.Tests.Controllers
             UsersController controller = new UsersController();
 
             // Act
-            controller.Post("value");
-
-            IEnumerable<string> result = controller.Get();
+            controller.PostUser(new User() { Name = "Alvaro" });
+            controller.PostUser(new User() { Name = "Jennifer" });
+            IEnumerable<User> result = controller.GetUsers();
 
             // Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.Count());
-            Assert.AreEqual("value1", result.ElementAt(0));
-            Assert.AreEqual("value2", result.ElementAt(1));
+            Assert.AreEqual("Alvaro", result.ElementAt(0).Name);
+            Assert.AreEqual("Jennifer", result.ElementAt(1).Name);
         }
     }
 }
