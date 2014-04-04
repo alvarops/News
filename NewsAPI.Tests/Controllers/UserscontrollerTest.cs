@@ -14,12 +14,14 @@ namespace NewsAPI.Tests.Controllers
     public class UsersControllerTest
     {
         [TestMethod]
-        public void Get()
+        public void PostAndGetOne()
         {
             // Arrange
             UsersController controller = new UsersController();
 
             // Act
+            controller.Post("value");
+
             IEnumerable<string> result = controller.Get();
 
             // Assert
