@@ -1,5 +1,6 @@
 namespace NewsAPI.Migrations
 {
+    using NewsAPI.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -26,6 +27,8 @@ namespace NewsAPI.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            context.Users.AddOrUpdate(new User() { Name = "User 1" },
+                new User() { Name = "User 2" });
         }
     }
 }
