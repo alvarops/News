@@ -15,7 +15,7 @@ namespace NewsAPI.Models
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
     
-        public NewsAPIContext() : base("name=NewsAPIContext")
+        public NewsAPIContext() : base("NewsAPIContext")
         {
         }
 
