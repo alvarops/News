@@ -24,19 +24,18 @@ namespace NewsAPI.Controllers
         // GET api/Users
         public IQueryable<User> GetUsers()
         {
-            return db.Users;
+            return db.Users.Include(u => u.Feeds);
         }
 
         // GET api/Users/5
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUser(int id)
         {
-            User user = db.Users.Find(id);
+            User user = db.Users.Include(u => u.Feeds).Where(u => u.UserId == id).First<User>();
             if (user == null)
             {
                 return NotFound();
             }
-
             return Ok(user);
         }
 
