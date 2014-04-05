@@ -1,16 +1,16 @@
 namespace NewsAPI.Migrations
 {
-    using NewsAPI.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using NewsAPI.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<NewsAPI.Models.NewsAPIContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(NewsAPI.Models.NewsAPIContext context)
@@ -27,8 +27,11 @@ namespace NewsAPI.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            context.Users.AddOrUpdate(new User() { Name = "User 1" },
-                new User() { Name = "User 2" });
+            Feed huffpo = new Feed { Name = "Huffington Post", Url = "http://www.huffingtonpost.co.uk/feeds/index.xml"};
+            context.Feeds.AddOrUpdate(f => f.Name, huffpo);
+            var feeds = new System.Collections.Generic.List<Feed>();
+            feeds.Add(huffpo);
+            context.Users.AddOrUpdate(u => u.Name, new User { Name = "Alvaro", Feeds = feeds});
         }
     }
 }

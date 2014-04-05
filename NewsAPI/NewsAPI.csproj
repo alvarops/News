@@ -140,6 +140,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\FeedsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -150,11 +151,12 @@
     <Compile Include="Migrations\201404041916045_Initial.Designer.cs">
       <DependentUpon>201404041916045_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201404042121391_Second.cs" />
-    <Compile Include="Migrations\201404042121391_Second.Designer.cs">
-      <DependentUpon>201404042121391_Second.cs</DependentUpon>
+    <Compile Include="Migrations\201404051911453_AddFeed.cs" />
+    <Compile Include="Migrations\201404051911453_AddFeed.Designer.cs">
+      <DependentUpon>201404051911453_AddFeed.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Feed.cs" />
     <Compile Include="Models\NewsAPIContext.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -185,7 +187,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -206,8 +210,8 @@
     <EmbeddedResource Include="Migrations\201404041916045_Initial.resx">
       <DependentUpon>201404041916045_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201404042121391_Second.resx">
-      <DependentUpon>201404042121391_Second.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201404051911453_AddFeed.resx">
+      <DependentUpon>201404051911453_AddFeed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

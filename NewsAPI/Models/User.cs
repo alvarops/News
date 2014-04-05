@@ -11,5 +11,6 @@ namespace NewsAPI.Models
         public int UserId { get; set;}
         [Required]
         public string Name { get; set; }
+        public virtual ICollection<Feed> Feeds { get; set; }
     }
 }

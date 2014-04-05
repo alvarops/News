@@ -7,13 +7,13 @@ namespace NewsAPI.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.0-30225")]
-    public sealed partial class Second : IMigrationMetadata
+    public sealed partial class AddFeed : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Second));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddFeed));
         
         string IMigrationMetadata.Id
         {
-            get { return "201404042121391_Second"; }
+            get { return "201404051911453_AddFeed"; }
         }
         
         string IMigrationMetadata.Source

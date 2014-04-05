@@ -16,6 +16,11 @@ namespace NewsAPI.Controllers
     {
         private NewsAPIContext db = new NewsAPIContext();
 
+        public UsersController ()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+        }
+
         // GET api/Users
         public IQueryable<User> GetUsers()
         {
