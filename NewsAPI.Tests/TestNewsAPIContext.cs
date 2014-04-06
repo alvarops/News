@@ -15,6 +15,13 @@ namespace NewsAPI.Tests
             this.Users = new TestUserDbSet();
             this.Feeds = new TestFeedDbSet();
             this.Articles = new TestArticleDbSet();
+
+
+            Feed huffpo = new Feed { Name = "Huffington Post", Url = "http://www.huffingtonpost.co.uk/feeds/index.xml" };
+            Feed aolcom = new Feed { Name = "AOL dot com", Url = "http://www.aol.com/feeds/index.xml" };
+            var feeds = new List<Feed>() { huffpo, aolcom };
+            feeds.ForEach(f => Feeds.Add(f));
+            Users.Add(new User { Name = "Alvaro", Feeds = new List<Feed>() { huffpo, aolcom } });
         }
 
         public DbSet<User> Users { get; set; }

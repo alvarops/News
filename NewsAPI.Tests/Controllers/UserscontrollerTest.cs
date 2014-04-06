@@ -50,9 +50,9 @@ namespace NewsAPI.Tests.Controllers
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Count());
-            Assert.AreEqual("Alvaro", result.ElementAt(0).Name);
-            Assert.AreEqual("Jennifer", result.ElementAt(1).Name);
+            Assert.AreEqual(3, result.Count());
+            Assert.AreEqual("Alvaro", result.ElementAt(1).Name);
+            Assert.AreEqual("Jennifer", result.ElementAt(2).Name);
 
             //// Tear Down
             //foreach (User user in db.Users)
@@ -62,6 +62,88 @@ namespace NewsAPI.Tests.Controllers
             //db.SaveChanges();
         }
 
+        [TestMethod]
+        public void Get()
+        {
+            // Arrange
+            UsersController controller = new UsersController(new TestNewsAPIContext());
+
+            // Act
+            IEnumerable<User> result = controller.GetUsers();
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual("Alvaro", result.ElementAt(0).Name);
+            Assert.AreEqual("Huffington Post", result.ElementAt(0).Feeds.ElementAt(0).Name);
+            Assert.AreEqual("AOL dot com", result.ElementAt(0).Feeds.ElementAt(1).Name);
+        }
+
+        [TestMethod]
+        public void GetById()
+        {
+            // Arrange
+            UsersController controller = new UsersController(new TestNewsAPIContext());
+
+            // Act
+            var result = controller.GetUser(0);
+            OkNegotiatedContentResult<User> contentResult = result as OkNegotiatedContentResult<User>;
+            
+            // Assert
+            Assert.IsNotNull(contentResult);
+            var user = contentResult.Content as User;
+            Assert.AreEqual("Alvaro", user.Name);
+        }
+
+        [TestMethod]
+        public void Post()
+        {
+            // Arrange
+            UsersController controller = new UsersController(new TestNewsAPIContext());
+
+            // Act
+            var user1rsp = controller.PostUser(
+                new User() { Name = "John", 
+                    Feeds = new List<Feed>() { 
+                        new Feed() { Name = "google", Url = "www.google.com/feeds" } 
+                    } 
+                }) as CreatedAtRouteNegotiatedContentResult<User>;
+
+            // Assert
+            Assert.IsNotNull(user1rsp);
+        }
+
+        [TestMethod]
+        public void Put()
+        {
+            // Arrange
+            UsersController controller = new UsersController(new TestNewsAPIContext());
+
+            // Act
+            var user1rsp = controller.PutUser(0, new User()
+            {
+                Name = "John",
+                Feeds = new List<Feed>() { 
+                        new Feed() { Name = "google", Url = "www.google.com/feeds" } 
+                    }
+            }) as StatusCodeResult;
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, user1rsp.StatusCode);
+        }
+
+        [TestMethod]
+        public void Delete()
+        {
+            // Arrange
+            UsersController controller = new UsersController(new TestNewsAPIContext());
+
+            // Act
+            var user1rsp = controller.DeleteUser(0) as OkNegotiatedContentResult<User>;
+
+            // Assert
+            Assert.IsNotNull(user1rsp);
+        }
 
     }
 }
