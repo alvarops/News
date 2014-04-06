@@ -155,7 +155,12 @@
     <Compile Include="Migrations\201404051911453_AddFeed.Designer.cs">
       <DependentUpon>201404051911453_AddFeed.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201404061719423_AddArticleTable.cs" />
+    <Compile Include="Migrations\201404061719423_AddArticleTable.Designer.cs">
+      <DependentUpon>201404061719423_AddArticleTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Article.cs" />
     <Compile Include="Models\Feed.cs" />
     <Compile Include="Models\INewsAPIContext.cs" />
     <Compile Include="Models\NewsAPIContext.cs" />
@@ -213,6 +218,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201404051911453_AddFeed.resx">
       <DependentUpon>201404051911453_AddFeed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404061719423_AddArticleTable.resx">
+      <DependentUpon>201404061719423_AddArticleTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

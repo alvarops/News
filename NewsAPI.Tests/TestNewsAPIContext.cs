@@ -14,10 +14,12 @@ namespace NewsAPI.Tests
         {
             this.Users = new TestUserDbSet();
             this.Feeds = new TestFeedDbSet();
+            this.Articles = new TestArticleDbSet();
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Feed> Feeds { get; set; }
+        public DbSet<Article> Articles { get; set; }
 
         public int SaveChanges()
         {

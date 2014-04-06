@@ -10,6 +10,9 @@ namespace NewsAPI.Models
     public interface INewsAPIContext : IDisposable
     {
         DbSet<User> Users { get; }
+        DbSet<Feed> Feeds { get; }
+        DbSet<Article> Articles { get; }
+
         int SaveChanges();
         void MarkAsModified(Object item);
     }
