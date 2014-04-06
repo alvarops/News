@@ -159,6 +159,10 @@
     <Compile Include="Migrations\201404061719423_AddArticleTable.Designer.cs">
       <DependentUpon>201404061719423_AddArticleTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201404061726371_MultipleUsersOneFeed.cs" />
+    <Compile Include="Migrations\201404061726371_MultipleUsersOneFeed.Designer.cs">
+      <DependentUpon>201404061726371_MultipleUsersOneFeed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Article.cs" />
     <Compile Include="Models\Feed.cs" />
@@ -221,6 +225,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201404061719423_AddArticleTable.resx">
       <DependentUpon>201404061719423_AddArticleTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404061726371_MultipleUsersOneFeed.resx">
+      <DependentUpon>201404061726371_MultipleUsersOneFeed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
