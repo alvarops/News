@@ -14,7 +14,16 @@ namespace NewsAPI.Controllers
 {
     public class FeedsController : ApiController
     {
-        private NewsAPIContext db = new NewsAPIContext();
+        private INewsAPIContext db = new NewsAPIContext();
+
+        public FeedsController()
+        {
+        }
+
+         public FeedsController(INewsAPIContext context)
+        {
+            db = context;
+        }
 
         // GET api/Feeds
         public IQueryable<Feed> GetFeeds()
@@ -48,8 +57,7 @@ namespace NewsAPI.Controllers
                 return BadRequest();
             }
 
-            db.Entry(feed).State = EntityState.Modified;
-
+            db.MarkAsModified(feed);
             try
             {
                 db.SaveChanges();

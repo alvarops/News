@@ -11,7 +11,7 @@ namespace NewsAPI.Tests
     {
         public override Feed Find(params object[] keyValues)
         {
-            return this.SingleOrDefault(feed => feed.FeedId == (int)keyValues.Single());
+            return this.FirstOrDefault(feed => feed.FeedId == (int)keyValues.Single());
         }
     }
 }
