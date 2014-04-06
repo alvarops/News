@@ -12,5 +12,9 @@ namespace NewsAPI.Models
         [Required]
         public string Name { get; set; }
         public virtual ICollection<Feed> Feeds { get; set; }
+        public User ()
+        {
+            Feeds = new List<Feed>();
+        }
     }
 }

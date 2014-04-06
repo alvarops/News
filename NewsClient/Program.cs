@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using NewsAPI.Models;
+using System.Collections.Generic;
 
 namespace NewsClient
 {
@@ -26,6 +27,23 @@ namespace NewsClient
                 {
                     User user = await response.Content.ReadAsAsync<User>();
                     Console.WriteLine("{0}", user.Name);
+                }
+
+
+                var gizmo = new User() { Name = "Gizmo" };
+                response = await client.PostAsJsonAsync("api/users", gizmo);
+                if (response.IsSuccessStatusCode)
+                {
+                    Uri gizmoUrl = response.Headers.Location;
+                    User user = await response.Content.ReadAsAsync<User>();
+                    Console.WriteLine("{0}", user.Name);
+                    // HTTP PUT
+                    gizmo.Feeds = new List<Feed>() { new Feed() { Name = "Slashdot", Url = "http://www.slashdot.com" } };
+                    response = await client.PutAsJsonAsync(gizmoUrl, gizmo);
+                    user = await response.Content.ReadAsAsync<User>();
+                    Console.WriteLine("{0}", user.Name);
+                    // HTTP DELETE
+                    response = await client.DeleteAsync(gizmoUrl);
                 }
             }
         }

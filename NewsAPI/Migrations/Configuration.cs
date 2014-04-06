@@ -5,6 +5,7 @@ namespace NewsAPI.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
     using NewsAPI.Models;
+    using System.Collections.Generic;
 
     internal sealed class Configuration : DbMigrationsConfiguration<NewsAPI.Models.NewsAPIContext>
     {
@@ -27,11 +28,11 @@ namespace NewsAPI.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            Feed huffpo = new Feed { Name = "Huffington Post", Url = "http://www.huffingtonpost.co.uk/feeds/index.xml"};
-            context.Feeds.AddOrUpdate(f => f.Name, huffpo);
-            var feeds = new System.Collections.Generic.List<Feed>();
-            feeds.Add(huffpo);
-            context.Users.AddOrUpdate(u => u.Name, new User { Name = "Alvaro", Feeds = feeds});
+            Feed huffpo = new Feed { Name = "Huffington Post", Url = "http://www.huffingtonpost.co.uk/feeds/index.xml" };
+            Feed aolcom = new Feed { Name = "AOL dot com", Url = "http://www.aol.com/feeds/index.xml" };
+            var feeds = new List<Feed>() { huffpo, aolcom };
+            feeds.ForEach(f => context.Feeds.AddOrUpdate(f));
+            context.Users.AddOrUpdate(u => u.Name, new User { Name = "Alvaro", Feeds = new List<Feed>() { huffpo, aolcom } });
         }
     }
 }

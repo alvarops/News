@@ -20,10 +20,7 @@ namespace NewsAPI.Models
             this.Configuration.ProxyCreationEnabled = false;
         }
 
-
-
         public System.Data.Entity.DbSet<NewsAPI.Models.User> Users { get; set; }
-
         public System.Data.Entity.DbSet<NewsAPI.Models.Feed> Feeds { get; set; }
         public System.Data.Entity.DbSet<NewsAPI.Models.Article> Articles { get; set; }
 
