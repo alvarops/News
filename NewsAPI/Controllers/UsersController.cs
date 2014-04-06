@@ -14,11 +14,17 @@ namespace NewsAPI.Controllers
 {
     public class UsersController : ApiController
     {
-        private NewsAPIContext db = new NewsAPIContext();
+        private INewsAPIContext db = new NewsAPIContext();
 
         public UsersController ()
         {
-            db.Configuration.ProxyCreationEnabled = false;
+           // db.Configuration.ProxyCreationEnabled = false;
+        }
+
+        public UsersController(INewsAPIContext context)
+        {
+            db = context;
+            // db.Configuration.ProxyCreationEnabled = false;
         }
 
         // GET api/Users
@@ -52,8 +58,8 @@ namespace NewsAPI.Controllers
                 return BadRequest();
             }
 
-            db.Entry(user).State = EntityState.Modified;
-
+           // db.Entry(user).State = EntityState.Modified;
+            db.MarkAsModified(user);
             try
             {
                 db.SaveChanges();

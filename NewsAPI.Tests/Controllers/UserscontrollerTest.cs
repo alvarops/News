@@ -16,20 +16,20 @@ namespace NewsAPI.Tests.Controllers
     [TestClass]
     public class UsersControllerTest
     {
-        private NewsAPIContext db = new NewsAPIContext();
+        //private NewsAPIContext db = new NewsAPIContext();
 
         [TestMethod]
         public void PostAndGetOne()
         {
             // Set up
-            foreach (User user in db.Users)
-            {
-                db.Users.Remove(user);
-            }
-            db.SaveChanges();
+            //foreach (User user in db.Users)
+            //{
+            //    db.Users.Remove(user);
+            //}
+            //db.SaveChanges();
 
             // Arrange
-            UsersController controller = new UsersController();
+            UsersController controller = new UsersController(new TestNewsAPIContext());
 
             // Act
             var user1rsp = controller.PostUser(new User() { Name = "Alvaro" }) as CreatedAtRouteNegotiatedContentResult<User>;
@@ -54,12 +54,12 @@ namespace NewsAPI.Tests.Controllers
             Assert.AreEqual("Alvaro", result.ElementAt(0).Name);
             Assert.AreEqual("Jennifer", result.ElementAt(1).Name);
 
-            // Tear Down
-            foreach (User user in db.Users)
-            {
-                db.Users.Remove(user);
-            }
-            db.SaveChanges();
+            //// Tear Down
+            //foreach (User user in db.Users)
+            //{
+            //    db.Users.Remove(user);
+            //}
+            //db.SaveChanges();
         }
 
 

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace NewsAPI.Models
 {
-    public class NewsAPIContext : DbContext
+    public class NewsAPIContext : DbContext, INewsAPIContext
     {
         // You can add custom code to this file. Changes will not be overwritten.
         // 
@@ -15,13 +15,20 @@ namespace NewsAPI.Models
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
     
-        public NewsAPIContext() : base("NewsAPIContext")
+        public NewsAPIContext() : base("name=NewsAPIContext")
         {
+            this.Configuration.ProxyCreationEnabled = false;
         }
+
+
 
         public System.Data.Entity.DbSet<NewsAPI.Models.User> Users { get; set; }
 
         public System.Data.Entity.DbSet<NewsAPI.Models.Feed> Feeds { get; set; }
-    
+
+        public void MarkAsModified(Object item)
+        {
+            Entry(item).State = EntityState.Modified;
+        }
     }
 }
