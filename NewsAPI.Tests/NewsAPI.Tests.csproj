@@ -100,10 +100,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ArticlesControllerTest.cs" />
     <Compile Include="Controllers\FeedsControllerTest.cs" />
     <Compile Include="Controllers\UsersControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\ValuesControllerTest.cs" />
     <Compile Include="TestDbSet.cs" />
     <Compile Include="TestArticleDbSet.cs" />
     <Compile Include="TestNewsAPIContext.cs" />

@@ -22,6 +22,15 @@ namespace NewsAPI.Tests
             var feeds = new List<Feed>() { huffpo, aolcom };
             feeds.ForEach(f => Feeds.Add(f));
             Users.Add(new User { Name = "Alvaro", Feeds = new List<Feed>() { huffpo, aolcom } });
+            Article article =
+                new Article
+                {
+                    Title = "Interesting title",
+                    PermLink = "http://www.huffingtonpost.co.uk/feeds/article7",
+                    Summary = "Text that should be longer than the title",
+                    Feed = huffpo
+                };
+            Articles.Add(article);
         }
 
         public DbSet<User> Users { get; set; }
