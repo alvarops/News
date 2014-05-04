@@ -5,13 +5,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>2.2</ProductVersion>
-    <ProjectGuid>1d67f7c2-f0b4-4313-8710-e1ff5c7073fd</ProjectGuid>
+    <ProjectGuid>cb26cd09-1dc0-4d91-b550-8c4237496c3d</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TableStorage</RootNamespace>
-    <AssemblyName>TableStorage</AssemblyName>
+    <RootNamespace>NewsAPIProvider</RootNamespace>
+    <AssemblyName>NewsAPIProvider</AssemblyName>
     <StartDevelopmentStorage>True</StartDevelopmentStorage>
-    <Name>TableStorage</Name>
+    <Name>NewsAPIProvider</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,7 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NewsAPIContent\" />
-    <Folder Include="Profiles" />
     <Folder Include="WorkerServiceContent\" />
   </ItemGroup>
   <ItemGroup>

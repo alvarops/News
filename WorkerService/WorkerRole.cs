@@ -8,11 +8,16 @@ using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
+using System.Xml;
+using System.ServiceModel.Syndication;
+using NewsAPI.Models;
 
 namespace WorkerService
 {
     public class WorkerRole : RoleEntryPoint
     {
+       // private INewsAPIContext db = new NewsAPIContext();
+
         public override void Run()
         {
             // This is a sample worker implementation. Replace with your logic.
@@ -22,6 +27,27 @@ namespace WorkerService
             {
                 Thread.Sleep(10000);
                 Trace.TraceInformation("Working", "Information");
+                string url = "http://www.huffingtonpost.co.uk/feeds/index.xml";
+                XmlReader reader = XmlReader.Create(url);
+                SyndicationFeed feed = SyndicationFeed.Load(reader);
+                reader.Close();
+                using (var db = new NewsAPIContext())
+                {
+                    foreach (SyndicationItem item in feed.Items)
+                    {
+                        String subject = item.Title.Text;
+                        String summary = item.Summary.Text;
+                        String permaLink = item.Links.ElementAt(0).GetAbsoluteUri().ToString();
+                        DateTime published = item.PublishDate.DateTime;
+
+                        Article article = new Article() { Title = subject, Summary = summary, PermLink = permaLink, Published = published };
+                        if (db.Articles.Where(a => a.Title == article.Title).SingleOrDefault() == null)
+                        {
+                            db.Articles.Add(article);
+                            db.SaveChanges();
+                        }
+                    }
+                }
             }
         }
 
