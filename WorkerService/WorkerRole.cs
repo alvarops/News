@@ -11,6 +11,7 @@ using Microsoft.WindowsAzure.Storage;
 using System.Xml;
 using System.ServiceModel.Syndication;
 using NewsAPI.Models;
+using System.Collections;
 
 namespace WorkerService
 {
@@ -27,20 +28,58 @@ namespace WorkerService
             {
                 Thread.Sleep(10000);
                 Trace.TraceInformation("Working", "Information");
-                string url = "http://www.huffingtonpost.co.uk/feeds/index.xml";
-                XmlReader reader = XmlReader.Create(url);
-                SyndicationFeed feed = SyndicationFeed.Load(reader);
-                reader.Close();
+                ArrayList feeds = new ArrayList();
                 using (var db = new NewsAPIContext())
                 {
-                    foreach (SyndicationItem item in feed.Items)
-                    {
-                        String subject = item.Title.Text;
-                        String summary = item.Summary.Text;
-                        String permaLink = item.Links.ElementAt(0).GetAbsoluteUri().ToString();
-                        DateTime published = item.PublishDate.DateTime;
+                    feeds.AddRange(db.Feeds.ToList());
+                    Trace.TraceInformation("Feeds Added", "Information");
+                }
 
-                        Article article = new Article() { Title = subject, Summary = summary, PermLink = permaLink, Published = published };
+                ArrayList articles = new ArrayList();
+                foreach (Feed currFeed in feeds)
+                {
+                    string url = currFeed.Url.ToString();
+                    Trace.TraceInformation("Parsing " + url, "Information");
+                    try
+                    {
+                        XmlReader reader = XmlReader.Create(url);
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+
+                        foreach (SyndicationItem item in feed.Items)
+                        {
+                            String subject = item.Title.Text;
+                            String summary = item.Summary.Text;
+                            String permaLink = item.Links.ElementAt(0).GetAbsoluteUri().ToString();
+                            DateTime published = item.PublishDate.DateTime;
+
+                            Article article = new Article()
+                            {
+                                Title = subject,
+                                Summary = summary,
+                                PermLink = permaLink,
+                                Published = published,
+                                Feed = currFeed
+                            };
+
+                            articles.Add(article);
+                        }
+                    }
+                    catch (WebException)
+                    {
+                        Trace.TraceError(url + " Not found");
+                    }
+                   
+
+                   
+                }
+               // string url = "http://www.huffingtonpost.co.uk/feeds/index.xml";
+               
+                using (var db = new NewsAPIContext())
+                {
+                    foreach (Article article in articles)
+                    {
+                       
                         if (db.Articles.Where(a => a.Title == article.Title).SingleOrDefault() == null)
                         {
                             db.Articles.Add(article);
