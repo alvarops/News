@@ -23,7 +23,12 @@ namespace WorkerService
         {
             // This is a sample worker implementation. Replace with your logic.
             Trace.TraceInformation("WorkerService entry point called", "Information");
-
+            using (var db = new NewsAPIContext())
+            {
+                foreach (Article a in db.Articles)
+                    db.Articles.Remove(a);
+                db.SaveChanges();
+            }
             while (true)
             {
                 Thread.Sleep(10000);
@@ -83,9 +88,10 @@ namespace WorkerService
                         if (db.Articles.Where(a => a.Title == article.Title).SingleOrDefault() == null)
                         {
                             db.Articles.Add(article);
-                            db.SaveChanges();
+                            db.Feeds.Where(f => f.FeedId == article.Feed.FeedId).First().Articles.Add(article);
                         }
                     }
+                    db.SaveChanges();
                 }
             }
         }
