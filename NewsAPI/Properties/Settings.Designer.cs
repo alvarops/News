@@ -22,5 +22,17 @@ namespace NewsAPI.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Driver={SQL Server Native Client 10.0};server=tcp:dy8yp1p8kj.database.windows.net" +
+            ",1433;database=newsapiA4yBwRqKp;uid=newsapimanager@dy8yp1p8kj;pwd=pass4News;encr" +
+            "ypt=yes;connection timeout=30")]
+        public string NewsAPIConnection {
+            get {
+                return ((string)(this["NewsAPIConnection"]));
+            }
+        }
     }
 }

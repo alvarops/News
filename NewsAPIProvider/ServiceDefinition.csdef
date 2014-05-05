@@ -1,13 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="NewsAPIProvider" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2013-10.2.2">
-  <WorkerRole name="WorkerService" vmsize="Small">
-    <Imports>
-      <Import moduleName="Diagnostics" />
-    </Imports>
-    <ConfigurationSettings>
-      <Setting name="NewsAPIConnection" />
-    </ConfigurationSettings>
-  </WorkerRole>
   <WebRole name="NewsAPI" vmsize="Small">
     <Sites>
       <Site name="Web">
@@ -25,5 +17,13 @@
     <ConfigurationSettings>
       <Setting name="NewsAPIConnection" />
     </ConfigurationSettings>
+    <LocalResources>
+      <LocalStorage name="LocalStorage1" cleanOnRoleRecycle="false" />
+    </LocalResources>
   </WebRole>
+  <WorkerRole name="WorkerService" vmsize="Small">
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+  </WorkerRole>
 </ServiceDefinition>

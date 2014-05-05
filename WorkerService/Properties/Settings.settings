@@ -3,8 +3,12 @@
   <Profiles />
   <Settings>
     <Setting Name="NewsAPIConnection" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)" />
-      <Value Profile="(Default)" />
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Driver={SQL Server Native Client 10.0};server=tcp:dy8yp1p8kj.database.windows.net,1433;database=newsapiA4yBwRqKp;uid=newsapimanager@dy8yp1p8kj;pwd=pass4News;encrypt=yes;connection timeout=30&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.Odbc&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Driver={SQL Server Native Client 10.0};server=tcp:dy8yp1p8kj.database.windows.net,1433;database=newsapiA4yBwRqKp;uid=newsapimanager@dy8yp1p8kj;pwd=pass4News;encrypt=yes;connection timeout=30</Value>
     </Setting>
   </Settings>
 </SettingsFile>

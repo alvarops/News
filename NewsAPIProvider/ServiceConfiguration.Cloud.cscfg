@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ServiceConfiguration serviceName="NewsAPIProvider" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2013-10.2.2">
+  <Role name="NewsAPI">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=pereda;AccountKey=yyqFWfdwifi014C5B6BTdo3ABfWGzLl9N5ReE3NcJlirVnV1yt3GvG6doj3MtBkmH+Aupz+zz3OFfv0mVX/riQ==" />
+      <Setting name="NewsAPIConnection" value="DefaultEndpointsProtocol=https;AccountName=pereda;AccountKey=yyqFWfdwifi014C5B6BTdo3ABfWGzLl9N5ReE3NcJlirVnV1yt3GvG6doj3MtBkmH+Aupz+zz3OFfv0mVX/riQ==" />
+    </ConfigurationSettings>
+  </Role>
   <Role name="WorkerService">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="NewsAPIConnection" value="DefaultEndpointsProtocol=https;AccountName=pereda;AccountKey=yyqFWfdwifi014C5B6BTdo3ABfWGzLl9N5ReE3NcJlirVnV1yt3GvG6doj3MtBkmH+Aupz+zz3OFfv0mVX/riQ==" />
-    </ConfigurationSettings>
-  </Role>
-  <Role name="NewsAPI">
-    <Instances count="1" />
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="NewsAPIConnection" value="DefaultEndpointsProtocol=https;AccountName=pereda;AccountKey=yyqFWfdwifi014C5B6BTdo3ABfWGzLl9N5ReE3NcJlirVnV1yt3GvG6doj3MtBkmH+Aupz+zz3OFfv0mVX/riQ==" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
