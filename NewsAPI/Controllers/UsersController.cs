@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using NewsAPI.Models;
+using System.Collections;
 
 namespace NewsAPI.Controllers
 {
@@ -42,7 +43,25 @@ namespace NewsAPI.Controllers
             {
                 return NotFound();
             }
+
             return Ok(user);
+        }
+
+        // GET api/Users/5/articles
+        public IQueryable<Article> GetArticles(int id, string full)
+        {
+            User user = db.Users.Include(u => u.Feeds).Where(u => u.UserId == id).First<User>();
+            List<Article> articles = null;
+            
+            foreach (Feed feed in user.Feeds)
+            {
+                var arts = db.Articles.Where(a => a.Feed.FeedId == feed.FeedId);
+                if (articles == null)
+                    articles = arts.ToList<Article>();
+                else
+                    articles.AddRange(arts.ToList<Article>());
+            }
+            return articles.AsQueryable();
         }
 
         // PUT api/Users/5
@@ -123,5 +142,6 @@ namespace NewsAPI.Controllers
         {
             return db.Users.Count(e => e.UserId == id) > 0;
         }
+
     }
 }

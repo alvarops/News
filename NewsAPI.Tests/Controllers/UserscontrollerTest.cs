@@ -96,6 +96,19 @@ namespace NewsAPI.Tests.Controllers
         }
 
         [TestMethod]
+        public void GetArticles()
+        {
+            // Arrange
+            UsersController controller = new UsersController(new TestNewsAPIContext());
+
+            // Act
+            IEnumerable < Article > result = controller.GetArticles(0, null);
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
         public void Post()
         {
             // Arrange

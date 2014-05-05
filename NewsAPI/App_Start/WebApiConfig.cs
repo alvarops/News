@@ -19,6 +19,12 @@ namespace NewsAPI
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Routes.MapHttpRoute(
+               name: "UserArticles",
+               routeTemplate: "api/{controller}/{id}/{full}",
+               defaults: new { action = "GetArticles" }
+           );
         }
     }
 }

@@ -21,10 +21,12 @@ namespace NewsAPI.Models
         public string Url { get; set; }
         [IgnoreDataMember]
         public virtual ICollection<User> Users { get; set; }
-
+        [IgnoreDataMember]
+        public virtual ICollection<Article> Articles { get; set; }
         public Feed ()
         {
             Users = new List<User>();
+            Articles = new List<Article>();
         }
     }
 }
