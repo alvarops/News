@@ -22,7 +22,7 @@ namespace NewsClient
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                 HttpResponseMessage response = await client.GetAsync("api/users/27");
+                 HttpResponseMessage response = await client.GetAsync("api/users/1");
                 if (response.IsSuccessStatusCode)
                 {
                     User user = await response.Content.ReadAsAsync<User>();

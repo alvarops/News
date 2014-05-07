@@ -85,11 +85,15 @@ namespace NewsAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
+            Feed prevFeed;
+            if ((prevFeed = db.Feeds.Where(f => f.Url == feed.Url).FirstOrDefault()) == null)
+            {
+                db.Feeds.Add(feed);
+                db.SaveChanges();
 
-            db.Feeds.Add(feed);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = feed.FeedId }, feed);
+                return CreatedAtRoute("DefaultApi", new { id = feed.FeedId }, feed);
+            }
+            return CreatedAtRoute("DefaultApi", new { id = prevFeed.FeedId }, prevFeed);
         }
 
         // DELETE api/Feeds/5
