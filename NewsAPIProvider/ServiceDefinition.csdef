@@ -25,5 +25,8 @@
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
+    <ConfigurationSettings>
+      <Setting name="NewsAPIConnection" />
+    </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
