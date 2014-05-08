@@ -79,9 +79,19 @@ namespace NewsAPI.Controllers
             {
                 return BadRequest();
             }
-
+            foreach (Feed feed in user.Feeds)
+            {
+                Feed existingFeed = db.Feeds.SingleOrDefault(f => f.Url == feed.Url);
+                if (existingFeed == null)
+                {
+                    db.Feeds.Add(feed);
+                    db.MarkAsModified(user);
+                }
+                else
+                    feed.FeedId = existingFeed.FeedId;
+            }
            // db.Entry(user).State = EntityState.Modified;
-            db.MarkAsModified(user);
+            
             try
             {
                 db.SaveChanges();
