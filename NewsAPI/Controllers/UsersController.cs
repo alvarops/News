@@ -50,9 +50,12 @@ namespace NewsAPI.Controllers
         // GET api/Users/5/articles
         public IQueryable<Article> GetArticles(int id, string full)
         {
-            User user = db.Users.Include(u => u.Feeds).Where(u => u.UserId == id).First<User>();
-            List<Article> articles = null;
-            
+            User user = db.Users.Include(u => u.Feeds).Where(u => u.UserId == id).FirstOrDefault<User>();
+            List<Article> articles = new List<Article>();
+            if (user == null)
+            {
+                return articles.AsQueryable();
+            }
             foreach (Feed feed in user.Feeds)
             {
                 var arts = db.Articles.Where(a => a.Feed.FeedId == feed.FeedId);

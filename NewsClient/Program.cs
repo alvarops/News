@@ -18,7 +18,7 @@ namespace NewsClient
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:26118/");
+                client.BaseAddress = new Uri("http://127.0.0.1/");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -29,7 +29,6 @@ namespace NewsClient
                     Console.WriteLine("{0}", user.Name);
                 }
 
-
                 var gizmo = new User() { Name = "Gizmo" };
                 response = await client.PostAsJsonAsync("api/users", gizmo);
                 if (response.IsSuccessStatusCode)
@@ -38,12 +37,11 @@ namespace NewsClient
                     User user = await response.Content.ReadAsAsync<User>();
                     Console.WriteLine("{0}", user.Name);
                     // HTTP PUT
-                    gizmo.Feeds = new List<Feed>() { new Feed() { Name = "Slashdot", Url = "http://www.slashdot.com" } };
-                    response = await client.PutAsJsonAsync(gizmoUrl, gizmo);
-                    user = await response.Content.ReadAsAsync<User>();
+                    user.Feeds = new List<Feed>() { new Feed() { Name = "Slashdot", Url = "http://rss.slashdot.org/Slashdot/slashdot" } };
+                    response = await client.PutAsJsonAsync("api/users/" + user.UserId, user);
                     Console.WriteLine("{0}", user.Name);
                     // HTTP DELETE
-                    response = await client.DeleteAsync(gizmoUrl);
+                    //response = await client.DeleteAsync(gizmoUrl);
                 }
             }
         }
