@@ -78,48 +78,6 @@ namespace WorkerService
             ParseArticles(feeds);
         }
 
-        private void SaveArticles(ArrayList articles)
-        {
-            if (articles.Count == 0)
-                return;
-            // Create the batch operation.
-            TableBatchOperation batchOperation = new TableBatchOperation();
-
-            foreach (Article article in articles)
-            {
-                AddArticleIfNew(batchOperation, article);
-            }
-            
-            table.ExecuteBatch(batchOperation);
-        }
-
-        private void AddArticleIfNew(TableBatchOperation batchOperation, Article article)
-        {
-            try
-            {
-                // Create the table query.
-                TableQuery<ArticleEntity> rangeQuery = new TableQuery<ArticleEntity>().Where(
-                    TableQuery.CombineFilters(
-                        TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, article.Feed.Url),
-                        TableOperators.And,
-                        TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, article.Title.GetHashCode().ToString())));
-                var oldArticle = table.ExecuteQuery(rangeQuery).FirstOrDefault();
-                if (oldArticle == null)
-                {
-                    batchOperation.Insert(article.toArticleEntity());
-                }
-                else
-                {
-                    Console.WriteLine("{0}, {1}\t{2}\t{3}", oldArticle.PartitionKey, oldArticle.RowKey,
-                    oldArticle.PermLink, oldArticle.Published);
-                }   
-            }
-            catch (StorageException)
-            {
-                batchOperation.Insert(article.toArticleEntity());
-            }
-        }
-
         private void ParseArticles(ArrayList feeds)
         {
             foreach (Feed currFeed in feeds)
@@ -178,6 +136,48 @@ namespace WorkerService
                 Feed = currFeed
             };
             return article;
+        }
+
+        private void SaveArticles(ArrayList articles)
+        {
+            if (articles.Count == 0)
+                return;
+            // Create the batch operation.
+            TableBatchOperation batchOperation = new TableBatchOperation();
+
+            foreach (Article article in articles)
+            {
+                AddArticleIfNew(batchOperation, article);
+            }
+
+            table.ExecuteBatch(batchOperation);
+        }
+
+        private void AddArticleIfNew(TableBatchOperation batchOperation, Article article)
+        {
+            try
+            {
+                // Create the table query.
+                TableQuery<ArticleEntity> rangeQuery = new TableQuery<ArticleEntity>().Where(
+                    TableQuery.CombineFilters(
+                        TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, article.Feed.Name),
+                        TableOperators.And,
+                        TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, article.Title.GetHashCode().ToString())));
+                var oldArticle = table.ExecuteQuery(rangeQuery).FirstOrDefault();
+                if (oldArticle == null)
+                {
+                    batchOperation.Insert(article.toArticleEntity());
+                }
+                else
+                {
+                    Console.WriteLine("{0}, {1}\t{2}\t{3}", oldArticle.PartitionKey, oldArticle.RowKey,
+                    oldArticle.PermLink, oldArticle.Published);
+                }
+            }
+            catch (StorageException)
+            {
+                batchOperation.Insert(article.toArticleEntity());
+            }
         }
 
         private static SyndicationFeed ParseXml(string url)

@@ -135,7 +135,7 @@ namespace NewsAPI.Controllers
             TableOperation removeOperation = TableOperation.Delete(article);
             table.Execute(removeOperation);
 
-            return Ok(article);
+            return Ok(article.ToArticle());
         }
 
         protected override void Dispose(bool disposing)
