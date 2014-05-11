@@ -22,7 +22,7 @@ namespace NewsAPI.Models
 
         public System.Data.Entity.DbSet<NewsAPI.Models.User> Users { get; set; }
         public System.Data.Entity.DbSet<NewsAPI.Models.Feed> Feeds { get; set; }
-        public System.Data.Entity.DbSet<NewsAPI.Models.Article> Articles { get; set; }
+     //   public System.Data.Entity.DbSet<NewsAPI.Models.Article> Articles { get; set; }
 
         public void MarkAsModified(Object item)
         {

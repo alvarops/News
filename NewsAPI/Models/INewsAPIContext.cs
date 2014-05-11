@@ -11,7 +11,7 @@ namespace NewsAPI.Models
     {
         DbSet<User> Users { get; }
         DbSet<Feed> Feeds { get; }
-        DbSet<Article> Articles { get; }
+       // DbSet<Article> Articles { get; }
 
         int SaveChanges();
         void MarkAsModified(Object item);

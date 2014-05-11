@@ -3,15 +3,15 @@
   <Role name="NewsAPI">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="NewsAPIConnection" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=pereda;AccountKey=yyqFWfdwifi014C5B6BTdo3ABfWGzLl9N5ReE3NcJlirVnV1yt3GvG6doj3MtBkmH+Aupz+zz3OFfv0mVX/riQ==" />
+      <Setting name="NewsAPIConnection" value="DefaultEndpointsProtocol=https;AccountName=pereda;AccountKey=yyqFWfdwifi014C5B6BTdo3ABfWGzLl9N5ReE3NcJlirVnV1yt3GvG6doj3MtBkmH+Aupz+zz3OFfv0mVX/riQ==" />
     </ConfigurationSettings>
   </Role>
   <Role name="WorkerService">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="NewsAPIConnection" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=pereda;AccountKey=yyqFWfdwifi014C5B6BTdo3ABfWGzLl9N5ReE3NcJlirVnV1yt3GvG6doj3MtBkmH+Aupz+zz3OFfv0mVX/riQ==" />
+      <Setting name="NewsAPIConnection" value="DefaultEndpointsProtocol=https;AccountName=pereda;AccountKey=yyqFWfdwifi014C5B6BTdo3ABfWGzLl9N5ReE3NcJlirVnV1yt3GvG6doj3MtBkmH+Aupz+zz3OFfv0mVX/riQ==" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

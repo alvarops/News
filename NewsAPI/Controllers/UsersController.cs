@@ -10,22 +10,49 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using NewsAPI.Models;
 using System.Collections;
+using Microsoft.WindowsAzure.Diagnostics;
+using Microsoft.WindowsAzure.ServiceRuntime;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace NewsAPI.Controllers
 {
     public class UsersController : ApiController
     {
         private INewsAPIContext db = new NewsAPIContext();
+        private CloudTable table;
 
         public UsersController ()
         {
            // db.Configuration.ProxyCreationEnabled = false;
+            InitStorage();
         }
 
         public UsersController(INewsAPIContext context)
         {
             db = context;
             // db.Configuration.ProxyCreationEnabled = false;
+        }
+
+        public UsersController(INewsAPIContext context, CloudTable table)
+        {
+            db = context;
+            this.table = table;
+            // db.Configuration.ProxyCreationEnabled = false;
+        }
+
+        private void InitStorage()
+        {
+            // Retrieve the storage account from the connection string.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+                Microsoft.WindowsAzure.CloudConfigurationManager.GetSetting("NewsAPIConnection"));
+
+            // Create the table client.
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+
+            //Create the CloudTable object that represents the "articles" table.
+            table = tableClient.GetTableReference("articles");
+            table.CreateIfNotExists();
         }
 
         // GET api/Users
@@ -51,18 +78,24 @@ namespace NewsAPI.Controllers
         public IQueryable<Article> GetArticles(int id, string full)
         {
             User user = db.Users.Include(u => u.Feeds).Where(u => u.UserId == id).FirstOrDefault<User>();
+            // Retrieve the storage account from the connection string.
+            
             List<Article> articles = new List<Article>();
             if (user == null)
             {
                 return articles.AsQueryable();
-            }
+            } 
+          
             foreach (Feed feed in user.Feeds)
             {
-                var arts = db.Articles.Where(a => a.Feed.FeedId == feed.FeedId);
-                if (articles == null)
-                    articles = arts.ToList<Article>();
-                else
-                    articles.AddRange(arts.ToList<Article>());
+                TableQuery<ArticleEntity> query = new TableQuery<ArticleEntity>()
+                  .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, feed.Name));
+
+                // Print the fields for each article.
+                foreach (ArticleEntity entity in table.ExecuteQuery(query))
+                {
+                    articles.Add(entity.ToArticle());
+                }
             }
             return articles.AsQueryable();
         }
@@ -155,6 +188,7 @@ namespace NewsAPI.Controllers
         {
             return db.Users.Count(e => e.UserId == id) > 0;
         }
+
 
     }
 }

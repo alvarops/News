@@ -10,6 +10,8 @@ using NewsAPI.Controllers;
 using NewsAPI.Models;
 using System.Net;
 using System.Web.Http.Results;
+using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.WindowsAzure.Storage;
 
 namespace NewsAPI.Tests.Controllers
 {
@@ -17,6 +19,7 @@ namespace NewsAPI.Tests.Controllers
     public class UsersControllerTest
     {
         //private NewsAPIContext db = new NewsAPIContext();
+        private CloudTable table;
 
         [TestMethod]
         public void PostAndGetOne()
@@ -99,7 +102,7 @@ namespace NewsAPI.Tests.Controllers
         public void GetArticles()
         {
             // Arrange
-            UsersController controller = new UsersController(new TestNewsAPIContext());
+            UsersController controller = new UsersController(new TestNewsAPIContext(), InitStorage());
 
             // Act
             IEnumerable < Article > result = controller.GetArticles(0, null);
@@ -157,6 +160,23 @@ namespace NewsAPI.Tests.Controllers
             // Assert
             Assert.IsNotNull(user1rsp);
         }
+        private CloudTable InitStorage()
+        {
+            if (table == null)
+            {
+                // Retrieve the storage account from the connection string.
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=pereda;AccountKey=yyqFWfdwifi014C5B6BTdo3ABfWGzLl9N5ReE3NcJlirVnV1yt3GvG6doj3MtBkmH+Aupz+zz3OFfv0mVX/riQ==");
 
+                // Create the table client.
+                CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+
+                //Create the CloudTable object that represents the "articles" table.
+                table = tableClient.GetTableReference("articles");
+                table.CreateIfNotExists();
+            }
+
+            return table;
+        }
     }
+
 }

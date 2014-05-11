@@ -16,22 +16,31 @@ using System.IO;
 using System.Text;
 using System.Globalization;
 using System.Data.Entity;
+using Microsoft.WindowsAzure.Storage.Table;
+using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage.Table.Protocol;
 
 namespace WorkerService
 {
     public class WorkerRole : RoleEntryPoint
     {
        // private INewsAPIContext db = new NewsAPIContext();
+        private CloudTable table;
 
         public override void Run()
+        {
+            ExecuteIt();
+        }
+
+        private void ExecuteIt()
         {
             // This is a sample worker implementation. Replace with your logic.
             Trace.TraceInformation("WorkerService entry point called", "Information");
             CleanupDatabase();
             while (true)
             {
-                Thread.Sleep(10000);
                 UpdateArticles();
+                Thread.Sleep(10000);
             }
         }
 
@@ -46,62 +55,80 @@ namespace WorkerService
             return base.OnStart();
         }
 
-        private static void CleanupDatabase()
+        private void CleanupDatabase()
         {
-            using (var db = new NewsAPIContext())
-            {
-                foreach (Article a in db.Articles)
-                    db.Articles.Remove(a);
-                SaveChanges(db);
-            }
+            // Retrieve the storage account from the connection string.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+                CloudConfigurationManager.GetSetting("NewsAPIConnection"));
+
+            // Create the table client.
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+
+            // Create the table if it doesn't exist.
+            table = tableClient.GetTableReference("articles");
+           // await table.DeleteIfExistsAsync();
+            table.SafeCreateIfNotExists();
         }
 
-        private static void UpdateArticles()
+        private void UpdateArticles()
         {
             Trace.TraceInformation("Saving Articles", "Information");
             ArrayList feeds = CreateListOfFeeds();
 
-            ArrayList articles = ParseArticles(feeds);
-            SaveArticles(feeds, articles);
+            ParseArticles(feeds);
         }
 
-        private static void SaveArticles(ArrayList feeds, ArrayList articles)
+        private void SaveArticles(ArrayList articles)
         {
-            // string url = "http://www.huffingtonpost.co.uk/feeds/index.xml";
-          //  CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
-            using (var db = new NewsAPIContext())
+            if (articles.Count == 0)
+                return;
+            // Create the batch operation.
+            TableBatchOperation batchOperation = new TableBatchOperation();
+
+            foreach (Article article in articles)
             {
-                foreach (Feed feed in feeds)
+                AddArticleIfNew(batchOperation, article);
+            }
+            
+            table.ExecuteBatch(batchOperation);
+        }
+
+        private void AddArticleIfNew(TableBatchOperation batchOperation, Article article)
+        {
+            try
+            {
+                // Create the table query.
+                TableQuery<ArticleEntity> rangeQuery = new TableQuery<ArticleEntity>().Where(
+                    TableQuery.CombineFilters(
+                        TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, article.Feed.Url),
+                        TableOperators.And,
+                        TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, article.Title.GetHashCode().ToString())));
+                var oldArticle = table.ExecuteQuery(rangeQuery).FirstOrDefault();
+                if (oldArticle == null)
                 {
-                    db.Entry(feed).State = EntityState.Modified;
+                    batchOperation.Insert(article.toArticleEntity());
                 }
-                foreach (Article article in articles)
+                else
                 {
-                    AddArticleIfNew(db, article);
-                }
-                
-                SaveChanges(db);
+                    Console.WriteLine("{0}, {1}\t{2}\t{3}", oldArticle.PartitionKey, oldArticle.RowKey,
+                    oldArticle.PermLink, oldArticle.Published);
+                }   
+            }
+            catch (StorageException)
+            {
+                batchOperation.Insert(article.toArticleEntity());
             }
         }
 
-        private static void AddArticleIfNew(NewsAPIContext db, Article article)
+        private void ParseArticles(ArrayList feeds)
         {
-            if (db.Articles.Where(a => a.Title == article.Title).FirstOrDefault() == null)
-            {
-                db.Articles.Add(article);
-                //db.Feeds.Where(f => f.FeedId == article.Feed.FeedId).First().Articles.Add(article);
-            }
-        }
-
-        private static ArrayList ParseArticles(ArrayList feeds)
-        {
-            ArrayList articles = new ArrayList();
             foreach (Feed currFeed in feeds)
             {
+                ArrayList articles = new ArrayList();
+           
                 ParseOneFeed(articles, currFeed);
-                
+                SaveArticles(articles);
             }
-            return articles;
         }
 
         private static void ParseOneFeed(ArrayList articles, Feed currFeed)
@@ -119,7 +146,6 @@ namespace WorkerService
                     Article article = BuildArticle(currFeed, item);
 
                     articles.Add(article);
-                    //currFeed.Articles.Add(article);
                 }
             }
             catch (WebException)
@@ -144,6 +170,7 @@ namespace WorkerService
 
             Article article = new Article()
             {
+                ArticleId = subject.GetHashCode(),
                 Title = subject,
                 Summary = summary,
                 PermLink = permaLink,
@@ -175,22 +202,10 @@ namespace WorkerService
             using (var db = new NewsAPIContext())
             {
                 feeds.AddRange(db.Feeds.ToList());
-                Trace.TraceInformation("Feeds Added", "Information");
             }
             return feeds;
         }
 
-        private static void SaveChanges(NewsAPIContext db)
-        {
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Trace.TraceError(e.ToString());
-            }
-        }
     }
 
     class MyXmlReader : XmlTextReader
@@ -301,6 +316,27 @@ namespace WorkerService
             {
                 return base.ReadString();
             }
+        }
+    }
+
+    public static class StorageExtensions
+    {
+        public static bool SafeCreateIfNotExists(this CloudTable table, TableRequestOptions requestOptions = null, OperationContext operationContext = null)
+        {
+            do
+            {
+                try
+                {
+                    return table.CreateIfNotExists(requestOptions, operationContext);
+                }
+                catch (StorageException e)
+                {
+                    if ((e.RequestInformation.HttpStatusCode == 409) && (e.RequestInformation.ExtendedErrorInformation.ErrorCode.Equals(TableErrorCodeStrings.TableBeingDeleted)))
+                        Thread.Sleep(1000);// The table is currently being deleted. Try again until it works.
+                    else
+                        throw;
+                }
+            } while (true);
         }
     }
 }
