@@ -149,8 +149,10 @@ namespace WorkerService
             {
                 AddArticleIfNew(batchOperation, article);
             }
-
-            table.ExecuteBatch(batchOperation);
+            if (batchOperation.Count > 0)
+            {
+                table.ExecuteBatch(batchOperation);
+            }
         }
 
         private void AddArticleIfNew(TableBatchOperation batchOperation, Article article)

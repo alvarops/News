@@ -100,6 +100,7 @@ namespace NewsAPI.Controllers
             return articles.AsQueryable();
         }
 
+        [ResponseType(typeof(User))]
         // PUT api/Users/5
         public IHttpActionResult PutUser(int id, User user)
         {
@@ -121,10 +122,12 @@ namespace NewsAPI.Controllers
                     db.MarkAsModified(user);
                 }
                 else
+                {
                     feed.FeedId = existingFeed.FeedId;
+                    db.Feeds.Where(f => f.FeedId == feed.FeedId).First().Users.Add(user);
+                }
+                    
             }
-           // db.Entry(user).State = EntityState.Modified;
-            
             try
             {
                 db.SaveChanges();
@@ -141,7 +144,7 @@ namespace NewsAPI.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(user);
         }
 
         // POST api/Users

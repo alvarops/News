@@ -136,16 +136,20 @@ namespace NewsAPI.Tests.Controllers
             UsersController controller = new UsersController(new TestNewsAPIContext());
 
             // Act
-            var user1rsp = controller.PutUser(0, new User()
+           
+            var response = controller.PutUser(0, new User()
             {
                 Name = "John",
                 Feeds = new List<Feed>() { 
                         new Feed() { Name = "google", Url = "www.google.com/feeds" } 
                     }
-            }) as StatusCodeResult;
-
+            }) as OkNegotiatedContentResult<User>;
+            User modUser = response.Content;
             // Assert
-            Assert.AreEqual(HttpStatusCode.NoContent, user1rsp.StatusCode);
+            Assert.AreEqual("John", modUser.Name);
+
+            // Revert
+            controller.DeleteUser(modUser.UserId);
         }
 
         [TestMethod]
